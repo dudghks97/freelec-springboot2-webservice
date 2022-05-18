@@ -1,37 +1,41 @@
-buildscript {
-    // build.gradle 에서 사용하는 전역변수 선언
-    ext {
-        springBootVersion = '2.1.7.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
+// 참고 : https://jojoldu.tistory.com/539
+plugins { // (1)
+    id 'org.springframework.boot' version '2.4.1' // RELEASE 삭제
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
 }
 
-// 플러그인 의존성 적용 여부 결정
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-
 group 'com.jojoldu.book'
-version '1.0-SNAPSHOT'
+version '1.0.4-SNAPSHOT-'+new Date().format("yyyyMMddHHmmss")
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+
+    jcenter()
+}
+
+// for Junit 5
+test { // (2)
+    useJUnitPlatform()
 }
 
 dependencies {
-    // 아래 두 라인은 gradle 버전 4 에서 동작하는 코드
-    //compile('org.springframework.boot:spring-boot-starter-web')
-    //testCompile('org.springframework.boot:spring-boot-starter-test')
-
-    // 아래와 같이 gradle 버전 7 에서 동작하는 코드로 변경
+    //(3)
     implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-mustache')
+
+    // Lombok
+    implementation('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+    testImplementation('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
+
+
+    // JPA
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa') // Spring Data Jpa 추상화 라이브러리
+    implementation("org.mariadb.jdbc:mariadb-java-client")
+    implementation('com.h2database:h2')     // 인메모리 관계형 데이터베이스
+
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
