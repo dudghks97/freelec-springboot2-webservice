@@ -38,7 +38,7 @@ jobs:
       shell: bash
 
     - name: Build with Gradle
-      run: ./gradlew clean build -x test # (8)
+      run: ./gradlew clean build -x test build # (8)
       shell: bash
 
     - name: Get current time
